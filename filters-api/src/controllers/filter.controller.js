@@ -4,6 +4,8 @@ const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
 const { filterService } = require('../services');
 
+// TODO: Update SWAGGER for the new controllers!!
+
 // [GET]
 // /v1/filters/{uuid}
 const getFilter = catchAsync(async (req, res) => {
