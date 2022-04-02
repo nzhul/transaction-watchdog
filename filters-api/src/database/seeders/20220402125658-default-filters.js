@@ -4,7 +4,7 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.bulkInsert('Filters', [
       {
-        id: 1,
+        id: 'b16c15ce-9841-4ea5-95fb-0d21f8cd85f0', // TODO: use uuid4()
         name: 'Amount Filter',
         maxAmount: 20.0,
         minAmount: 0.2,

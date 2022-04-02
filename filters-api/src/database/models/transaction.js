@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Transaction extends Model {
     /**
@@ -13,16 +11,24 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Transaction.init({
-    blockNumber: DataTypes.INTEGER,
-    blockHash: DataTypes.STRING,
-    address: DataTypes.STRING,
-    from: DataTypes.STRING,
-    to: DataTypes.STRING,
-    amount: DataTypes.INTEGER
-  }, {
-    sequelize,
-    modelName: 'Transaction',
-  });
+  Transaction.init(
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: sequelize.UUIDV4,
+        primaryKey: true,
+      },
+      blockNumber: DataTypes.INTEGER,
+      blockHash: DataTypes.STRING,
+      address: DataTypes.STRING,
+      from: DataTypes.STRING,
+      to: DataTypes.STRING,
+      amount: DataTypes.INTEGER,
+    },
+    {
+      sequelize,
+      modelName: 'Transaction',
+    }
+  );
   return Transaction;
 };

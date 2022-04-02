@@ -4,6 +4,8 @@ const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
 const { filterService } = require('../services');
 
+// [GET]
+// /v1/filters/{uuid}
 const getFilter = catchAsync(async (req, res) => {
   const filter = await filterService.getFilter(req.params.filterId);
 
@@ -14,6 +16,23 @@ const getFilter = catchAsync(async (req, res) => {
   res.send(filter);
 });
 
+// [GET]
+// /v1/filters/
+const getFilters = catchAsync(async (req, res) => {
+  const options = pick(req.query, ['sortBy', 'limit', 'offset']);
+  const resut = await filterService.getFilters(options);
+  res.send(resut);
+});
+
+// [POST]
+// /v1/filters
+const createOrUpdateFilter = catchAsync(async (req, res) => {
+  const filter = await filterService.createOrUpdateFilter(req.params.filterId, req.body);
+  res.send(filter);
+});
+
 module.exports = {
   getFilter,
+  getFilters,
+  createOrUpdateFilter,
 };

@@ -24,7 +24,7 @@
     "create-model": "npx sequelize-cli model:generate --name Filter --attributes token:string,from:string,to:string,amount:integer",
     "migrate": "npx sequelize-cli db:migrate",
     "undo-migration": "npx sequelize-cli db:migrate:undo",
-    "make-seed": "npx sequelize-cli seed:generate --name demo-user",
+    "make-seed": "npx sequelize-cli seed:generate --name default-filters",
     "seed": "npx sequelize-cli db:seed:all"
   },
   "keywords": [
@@ -72,6 +72,7 @@
     "sequelize": "^6.17.0",
     "swagger-jsdoc": "^6.0.8",
     "swagger-ui-express": "^4.1.6",
+    "uuid": "^8.3.2",
     "validator": "^13.0.0",
     "winston": "^3.2.1",
     "xss-clean": "^0.1.1"

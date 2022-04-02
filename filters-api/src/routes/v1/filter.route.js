@@ -5,6 +5,8 @@ const filterController = require('../../controllers/filter.controller');
 
 const router = express.Router();
 
+router.get('/', validate(filterValidation.getFilters), filterController.getFilters);
 router.get('/:filterId', validate(filterValidation.getFilter), filterController.getFilter);
+router.post('/:filterId', validate(filterValidation.createOrUpdateFilter), filterController.createOrUpdateFilter);
 
 module.exports = router;
