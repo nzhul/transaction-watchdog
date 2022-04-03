@@ -56,8 +56,10 @@ app.get("/api/filter-test", async (req, res, next) => {
   }
 
   // Load latest filter
+  // [comment] In real-case scenario we will probably want to iterate all filters. But this highly depends from the business requirements.
+  // Thats why I am just using the latest filter for demonstration purposes.
   const latestFilter = await db.Filter.findOne({
-    order: [["createdAt", "DESC"]],
+    order: [["updatedAt", "DESC"]],
   });
 
   if (!lastProcessedBlock) {

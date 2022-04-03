@@ -2,10 +2,22 @@ const db = require('../database');
 const ApiError = require('../utils/ApiError');
 const { v4: uuidv4 } = require('uuid');
 
+/**
+ * Get single filter by id
+ * @param {ObjectId} id
+ * @returns {Promise<Filter>}
+ */
 const getFilter = async (id) => {
   return await db.Filter.findByPk(id);
 };
 
+/**
+ * Get paginated result of filters
+ * @param {Object} options - Query options
+ * @param {number} [options.limit] - Maximum number of results per page (default = 10)
+ * @param {number} [options.offset] - Current page/offset (default = 0)
+ * @returns {Promise<QueryResult>}
+ */
 const getFilters = async (options) => {
   return await db.Filter.findAndCountAll({
     limit: options.limit || 10,
@@ -35,8 +47,23 @@ const createOrUpdateFilter = async (id, body) => {
   return filter;
 };
 
+// TODO: endpoint for deletion of filters
+const deleteFilter = async (id) => {
+  const filter = await db.Filter.findByPk(id);
+  if (!filter) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Filter not found');
+  }
+
+  await db.Filter.destroy({
+    where: {
+      id: id,
+    },
+  });
+};
+
 module.exports = {
   getFilter,
   getFilters,
   createOrUpdateFilter,
+  deleteFilter,
 };

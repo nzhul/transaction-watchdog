@@ -28,8 +28,15 @@ const createOrUpdateFilter = {
   }),
 };
 
+const deleteFilter = {
+  params: Joi.object().keys({
+    filterId: Joi.string().guid().required(),
+  }),
+};
+
 module.exports = {
   getFilter,
   getFilters,
   createOrUpdateFilter,
+  deleteFilter,
 };
