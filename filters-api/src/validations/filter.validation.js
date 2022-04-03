@@ -1,5 +1,4 @@
 const Joi = require('joi');
-const { password, objectId } = require('./custom.validation');
 
 const getFilter = {
   params: Joi.object().keys({
@@ -23,8 +22,8 @@ const createOrUpdateFilter = {
     token: Joi.string().required(),
     from: Joi.string(), // TODO: Regex validate it matches Blockchain `Address` format
     to: Joi.string(), // TODO: Regex validate it matches Blockchain `Address` format
-    minAmount: Joi.number(), // TODO: Validate it is `float`
-    maxAmount: Joi.number(), // TODO: Validate it is `float`
+    minAmount: Joi.number(),
+    maxAmount: Joi.number(),
   }),
 };
 
