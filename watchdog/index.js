@@ -10,6 +10,13 @@ const { v4: uuidv4 } = require("uuid");
 app.use(express.json());
 app.use(cors());
 
+// TODOs:
+// 1. Try to extract into separate modules
+// 2. Trigger the sync using CRON. Currently it is happening using http trigger
+// 3. HOT-RELOAD
+//    + functionality will work automatically because we are fetching the latest Filter on every execution
+//    + We can add cache that will prevent the database call on every job run.
+
 // ETHERS CONFIG
 const INFURA_ID = "b2f2b2eaa9b84a7e9120a715b073a1cd";
 const provider = new ethers.providers.JsonRpcProvider(
@@ -97,13 +104,11 @@ app.get("/api/filter-test", async (req, res, next) => {
     );
   }
 
-  res
-    .status(200)
-    .json({
-      lastBlock,
-      totalTransactions: transferEvents.length,
-      matches: matches,
-    });
+  res.status(200).json({
+    lastBlock,
+    totalTransactions: transferEvents.length,
+    matches: matches,
+  });
 });
 
 async function Matches(transaction, filter) {
