@@ -25,6 +25,14 @@ const getFilters = async (options) => {
   });
 };
 
+/**
+ * Create or update filter.
+ * If the provided id is equal to 'new-filter', we will create a new filter
+ * otherwise we will try to find an existing filter to update.
+ * @param {ObjectId} id
+ * @param {Object} updateBody
+ * @returns {Promise<Filter>}
+ */
 const createOrUpdateFilter = async (id, body) => {
   if (id == 'new-filter') {
     body.id = uuidv4();
@@ -47,7 +55,11 @@ const createOrUpdateFilter = async (id, body) => {
   return filter;
 };
 
-// TODO: endpoint for deletion of filters
+/**
+ * Delete filter by id
+ * @param {ObjectId} id
+ * @returns {Promise<Filter>}
+ */
 const deleteFilter = async (id) => {
   const filter = await db.Filter.findByPk(id);
   if (!filter) {

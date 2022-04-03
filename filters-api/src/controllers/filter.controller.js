@@ -39,6 +39,10 @@ const createOrUpdateFilter = catchAsync(async (req, res) => {
   res.send(filter);
 });
 
+/**
+ * [DELETE]
+ * /v1/filters/{uuid}
+ */
 const deleteFilter = catchAsync(async (req, res) => {
   await filterService.deleteFilter(req.params.filterId);
   res.status(httpStatus.NO_CONTENT).send();

@@ -18,6 +18,11 @@ app.use(cors());
 //    + functionality will work automatically because we are fetching the latest Filter on every execution
 //    + We can add cache that will prevent the database call on every job run.
 
+// 5. Try to automatically execute sequelize.sync() and sequelize.seed() on project startup.
+//    + do it both on API and Watcher side, so it does not matter which is started first.
+// 6. Try to write integration and unit tests based on the examples.
+// 7. Use logger in all possible places. API and Watcher!
+
 // ETHERS CONFIG
 const INFURA_ID = "b2f2b2eaa9b84a7e9120a715b073a1cd";
 const provider = new ethers.providers.JsonRpcProvider(

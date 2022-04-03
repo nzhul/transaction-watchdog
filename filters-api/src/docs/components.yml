@@ -19,6 +19,31 @@ components:
         name: fake name
         role: user
 
+    Filter:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        token:
+          type: string
+        from:
+          type: string
+        to:
+          type: string
+        minAmount:
+          type: integer
+        maxAmount:
+          type: integer
+      example:
+        name: My Filter
+        token: "0x6B175474E89094C44Da98b954EedeAC495271d0F"
+        from: "0x65DAaB5A0dAa4338d7684BB110937b1AA1C5c066"
+        to: "0x0F569E5df7D718E71032063046B616f2837e98dD"
+        minAmount: 0.5
+        maxAmount: 200
+
     Token:
       type: object
       properties:
@@ -84,6 +109,15 @@ components:
           example:
             code: 404
             message: Not found
+    BadRequest:
+      description: Invalid input values
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Invalid input values
 
   securitySchemes:
     bearerAuth:
