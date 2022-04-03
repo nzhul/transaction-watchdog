@@ -12,8 +12,9 @@ app.use(cors());
 
 // TODOs:
 // 1. Try to extract into separate modules
-// 2. Trigger the sync using CRON. Currently it is happening using http trigger
-// 3. HOT-RELOAD
+// 2. Try to apply filters directly on await contract.queryFilter(...)
+// 3. Trigger the sync using CRON. Currently it is happening using http trigger
+// 4. HOT-RELOAD
 //    + functionality will work automatically because we are fetching the latest Filter on every execution
 //    + We can add cache that will prevent the database call on every job run.
 
