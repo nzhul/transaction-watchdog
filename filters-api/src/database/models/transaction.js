@@ -23,7 +23,15 @@ module.exports = (sequelize, DataTypes) => {
       address: DataTypes.STRING,
       from: DataTypes.STRING,
       to: DataTypes.STRING,
-      amount: DataTypes.INTEGER,
+      amount: DataTypes.DECIMAL(36, 18),
+      filterId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+          model: 'Filters',
+          key: 'id',
+        },
+      },
     },
     {
       sequelize,

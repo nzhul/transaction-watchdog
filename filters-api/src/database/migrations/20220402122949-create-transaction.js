@@ -23,7 +23,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       amount: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.DECIMAL(36, 18),
       },
       filterId: {
         type: Sequelize.UUID,
