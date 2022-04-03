@@ -22,6 +22,8 @@ app.use(cors());
 //    + do it both on API and Watcher side, so it does not matter which is started first.
 // 6. Try to write integration and unit tests based on the examples.
 // 7. Use logger in all possible places. API and Watcher!
+// 8. Finish the filtering! Currently we filter only by amount!
+// 9. Uninstall redundant packages.
 
 // ETHERS CONFIG
 const INFURA_ID = "b2f2b2eaa9b84a7e9120a715b073a1cd";
