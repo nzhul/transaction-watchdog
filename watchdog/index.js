@@ -63,21 +63,27 @@ app.get("/api/filter-test", async (req, res, next) => {
     lastBlock
   );
 
+  let matches = 0;
+
   for (let i = 0; i < transferEvents.length; i++) {
     const transaction = transferEvents[i];
 
-    if (Matches(transaction, latestFilter)) {
-      await db.Transaction.create({
-        id: uuidv4(),
-        filterId: latestFilter.id,
-        blockNumber: transaction.blockNumber,
-        blockHash: transaction.blockHash,
-        address: transaction.address,
-        from: transaction.args[0],
-        to: transaction.args[1],
-        amount: ethers.utils.formatEther(transaction.args[2]),
-      });
+    if (!(await Matches(transaction, latestFilter))) {
+      continue;
     }
+
+    matches++;
+
+    await db.Transaction.create({
+      id: uuidv4(),
+      filterId: latestFilter.id,
+      blockNumber: transaction.blockNumber,
+      blockHash: transaction.blockHash,
+      address: transaction.address,
+      from: transaction.args[0],
+      to: transaction.args[1],
+      amount: ethers.utils.formatEther(transaction.args[2]),
+    });
   }
 
   if (lastBlock > lastProcessedBlock && transferEvents.length > 0) {
@@ -93,11 +99,26 @@ app.get("/api/filter-test", async (req, res, next) => {
 
   res
     .status(200)
-    .json({ lastBlock, processedTransactions: transferEvents.length });
+    .json({
+      lastBlock,
+      totalTransactions: transferEvents.length,
+      matches: matches,
+    });
 });
 
 async function Matches(transaction, filter) {
-  return true;
+  // 1. Amount is within range
+  if (filter.minAmount || filter.maxAmount) {
+    const amount = Number(ethers.utils.formatEther(transaction.args[2]));
+
+    if (filter.minAmount && filter.maxAmount) {
+      return amount > filter.minAmount && amount < filter.maxAmount;
+    } else if (filter.minAmount) {
+      return amount > filter.minAmount;
+    } else {
+      return amount < filter.maxAmount;
+    }
+  }
 }
 
 let jobRunning = false;
