@@ -6,8 +6,10 @@ const { filterService } = require('../services');
 
 // TODO: Update SWAGGER for the new controllers!!
 
-// [GET]
-// /v1/filters/{uuid}
+/**
+ * [GET]
+ * /v1/filters/{uuid}
+ */
 const getFilter = catchAsync(async (req, res) => {
   const filter = await filterService.getFilter(req.params.filterId);
 
@@ -18,23 +20,37 @@ const getFilter = catchAsync(async (req, res) => {
   res.send(filter);
 });
 
-// [GET]
-// /v1/filters/
+/**
+ * [GET]
+ * /v1/filters/
+ */
 const getFilters = catchAsync(async (req, res) => {
   const options = pick(req.query, ['sortBy', 'limit', 'offset']);
   const resut = await filterService.getFilters(options);
   res.send(resut);
 });
 
-// [POST]
-// /v1/filters
+/**
+ * [POST]
+ * /v1/filters
+ */
 const createOrUpdateFilter = catchAsync(async (req, res) => {
   const filter = await filterService.createOrUpdateFilter(req.params.filterId, req.body);
   res.send(filter);
+});
+
+/**
+ * [DELETE]
+ * /v1/filters/{uuid}
+ */
+const deleteFilter = catchAsync(async (req, res) => {
+  await filterService.deleteFilter(req.params.filterId);
+  res.status(httpStatus.NO_CONTENT).send();
 });
 
 module.exports = {
   getFilter,
   getFilters,
   createOrUpdateFilter,
+  deleteFilter
 };

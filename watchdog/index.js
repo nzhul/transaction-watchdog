@@ -10,6 +10,19 @@ const { v4: uuidv4 } = require("uuid");
 app.use(express.json());
 app.use(cors());
 
+// TODOs:
+// 1. Try to extract into separate modules
+// 2. Try to apply filters directly on await contract.queryFilter(...)
+// 3. Trigger the sync using CRON. Currently it is happening using http trigger
+// 4. HOT-RELOAD
+//    + functionality will work automatically because we are fetching the latest Filter on every execution
+//    + We can add cache that will prevent the database call on every job run.
+
+// 5. Try to automatically execute sequelize.sync() and sequelize.seed() on project startup.
+//    + do it both on API and Watcher side, so it does not matter which is started first.
+// 6. Try to write integration and unit tests based on the examples.
+// 7. Use logger in all possible places. API and Watcher!
+
 // ETHERS CONFIG
 const INFURA_ID = "b2f2b2eaa9b84a7e9120a715b073a1cd";
 const provider = new ethers.providers.JsonRpcProvider(
@@ -48,8 +61,10 @@ app.get("/api/filter-test", async (req, res, next) => {
   }
 
   // Load latest filter
+  // [comment] In real-case scenario we will probably want to iterate all filters. But this highly depends from the business requirements.
+  // Thats why I am just using the latest filter for demonstration purposes.
   const latestFilter = await db.Filter.findOne({
-    order: [["createdAt", "DESC"]],
+    order: [["updatedAt", "DESC"]],
   });
 
   if (!lastProcessedBlock) {
@@ -97,13 +112,11 @@ app.get("/api/filter-test", async (req, res, next) => {
     );
   }
 
-  res
-    .status(200)
-    .json({
-      lastBlock,
-      totalTransactions: transferEvents.length,
-      matches: matches,
-    });
+  res.status(200).json({
+    lastBlock,
+    totalTransactions: transferEvents.length,
+    matches: matches,
+  });
 });
 
 async function Matches(transaction, filter) {
