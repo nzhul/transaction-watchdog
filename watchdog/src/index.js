@@ -5,7 +5,6 @@ const config = require("./config/config");
 var CronJob = require("cron").CronJob;
 
 // TODOs:
-// 1 Finish the filtering! Currently we filter only by amount!
 // 2 Refactor database/config/config.js to use Joi and work with .env
 // 2 Update README.MD with GUIDE on how to run the project.
 // 3 Try to write integration and unit tests based on the examples.

@@ -42,7 +42,7 @@ async function Run() {
       totalTransactions: 0,
       matches: 0,
       lastBlock: lastBlock,
-      message: "Latest block is already processed. Skip!",
+      message: "Latest block has already been processed in previous run. Skip!",
     };
   }
 
@@ -101,18 +101,37 @@ async function Run() {
 }
 
 async function Matches(transaction, filter) {
+  const compareResults = [];
   // 1. Amount is within range
   if (filter.minAmount || filter.maxAmount) {
     const amount = Number(ethers.utils.formatEther(transaction.args[2]));
 
     if (filter.minAmount && filter.maxAmount) {
-      return amount > filter.minAmount && amount < filter.maxAmount;
+      compareResults.push(
+        amount > filter.minAmount && amount < filter.maxAmount
+      );
     } else if (filter.minAmount) {
-      return amount > filter.minAmount;
+      compareResults.push(amount > filter.minAmount);
     } else {
-      return amount < filter.maxAmount;
+      compareResults.push(amount < filter.maxAmount);
     }
   }
+
+  // 2. `from` and `to`
+  if (filter.from || filter.to) {
+    const from = transaction.args[0];
+    const to = transaction.args[1];
+
+    if (filter.from && filter.to) {
+      compareResults.push(filter.from == from && filter.to == to);
+    } else if (filter.from) {
+      compareResults.push(filter.from == from);
+    } else {
+      compareResults.push(filter.to == to);
+    }
+  }
+
+  return compareResults.some((x) => x === true);
 }
 
 module.exports = {
