@@ -1,14 +1,8 @@
-const express = require("express");
-const app = express();
-const cors = require("cors");
 require("dotenv").config();
 const db = require("../filters-api/src/database"); // TODO: Extract this into common module/package
 var CronJob = require("cron").CronJob;
 const { ethers } = require("ethers");
 const { v4: uuidv4 } = require("uuid");
-
-app.use(express.json());
-app.use(cors());
 
 // TODOs:
 // 1. Try to extract into separate modules
@@ -24,41 +18,43 @@ app.use(cors());
 // 7. Use logger in all possible places. API and Watcher!
 // 8. Finish the filtering! Currently we filter only by amount!
 // 9. Uninstall redundant packages.
+// 10. Update README.MD with GUIDE on how to run the project.
+// 11. Explain why I am not using Axios and Awilix
 
-// ETHERS CONFIG
-const INFURA_ID = "b2f2b2eaa9b84a7e9120a715b073a1cd";
-const provider = new ethers.providers.JsonRpcProvider(
-  `https://mainnet.infura.io/v3/${INFURA_ID}`
-);
+const job = new CronJob("0/10 * * * * *", async () => {
+  console.log("--WATCHDOG TRIGGER--");
 
-const ERC20_ABI = [
-  "function name() view returns (string)",
-  "function symbol() view returns (string)",
-  "function totalSupply() view returns (uint256)",
-  "function balanceOf(address) view returns (uint)",
+  // ETHERS CONFIG
+  const INFURA_ID = "b2f2b2eaa9b84a7e9120a715b073a1cd";
+  const provider = new ethers.providers.JsonRpcProvider(
+    `https://mainnet.infura.io/v3/${INFURA_ID}`
+  );
 
-  "event Transfer(address indexed from, address indexed to, uint amount)",
-];
+  const ERC20_ABI = [
+    "function name() view returns (string)",
+    "function symbol() view returns (string)",
+    "function totalSupply() view returns (uint256)",
+    "function balanceOf(address) view returns (uint)",
 
-const address = "0x6B175474E89094C44Da98b954EedeAC495271d0F"; // DAI Contract
+    "event Transfer(address indexed from, address indexed to, uint amount)",
+  ];
 
-const contract = new ethers.Contract(address, ERC20_ABI, provider);
+  const address = "0x6B175474E89094C44Da98b954EedeAC495271d0F"; // DAI Contract
 
-app.get("/api/filter-test", async (req, res, next) => {
+  const contract = new ethers.Contract(address, ERC20_ABI, provider);
+
   const lastBlockTracker = await db.Tracker.findOne({
     name: "last-processed-block",
+    logging: false,
   });
 
   const lastBlock = await provider.getBlockNumber();
   let lastProcessedBlock = Number(lastBlockTracker.value);
 
   if (lastBlock == lastProcessedBlock) {
-    console.log("Latest block is already processed. Skip!");
-    res.status(200).json({
-      lastBlock,
-      processedTransactions: 0,
-      message: "Latest block is already processed. Skip!",
-    });
+    console.log(
+      `message: Latest block is already processed. Skip! | LastBlock: ${lastBlock}`
+    );
     return;
   }
 
@@ -67,6 +63,7 @@ app.get("/api/filter-test", async (req, res, next) => {
   // Thats why I am just using the latest filter for demonstration purposes.
   const latestFilter = await db.Filter.findOne({
     order: [["updatedAt", "DESC"]],
+    logging: false,
   });
 
   if (!lastProcessedBlock) {
@@ -110,15 +107,15 @@ app.get("/api/filter-test", async (req, res, next) => {
         where: {
           name: "last-processed-block",
         },
+        logging: false,
       }
     );
   }
 
-  res.status(200).json({
-    lastBlock,
-    totalTransactions: transferEvents.length,
-    matches: matches,
-  });
+  // TODO: Replace console log with _logger.
+  console.log(
+    `TotalTransactions: ${transferEvents.length} | Matches: ${matches} | LastBlock: ${lastBlock}`
+  );
 });
 
 async function Matches(transaction, filter) {
@@ -136,26 +133,6 @@ async function Matches(transaction, filter) {
   }
 }
 
-let jobRunning = false;
-
-const job = new CronJob("0/5 * * * * *", async () => {
-  console.log("cron job running every 5 seconds");
-});
-
-app.get("/api/trigger-job", (req, res, next) => {
-  if (jobRunning) {
-    job.stop();
-    jobRunning = false;
-  } else {
-    job.start();
-    jobRunning = true;
-  }
-  res.json({ running: jobRunning });
-});
-
-// start server
-app.listen(process.env.PORT, () =>
-  console.log(`\x1b[0m[LOG] Server running on port ${process.env.PORT}`)
-);
+job.start();
 
 // Cache: https://dev.to/franciscomendes10866/simple-in-memory-cache-in-node-js-gl4
