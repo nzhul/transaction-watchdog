@@ -2,7 +2,6 @@
   "name": "ethereum-filters-api",
   "version": "1.0.0",
   "description": "Ethereum Filters API provides a way to create custom filters, which will be used by the transaction watchdog.",
-  "bin": "bin/createNodejsApp.js",
   "main": "src/index.js",
   "repository": "https://github.com/nzhul/transaction-watchdog",
   "author": "Dobromir Ivanov <dobromirivanov1@gmail.com>",
@@ -30,22 +29,18 @@
   "keywords": [
     "node",
     "node.js",
-    "boilerplate",
-    "generator",
     "express",
     "rest",
     "api",
-    "mongodb",
-    "mongoose",
     "es6",
     "es7",
     "es8",
     "es9",
     "jest",
-    "passport",
     "joi",
     "eslint",
-    "prettier"
+    "prettier",
+    "watchdog"
   ],
   "dependencies": {
     "bcryptjs": "^2.4.3",
