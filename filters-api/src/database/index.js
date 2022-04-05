@@ -8,9 +8,12 @@ const basename = path.basename(__filename);
 const config = require('./config/config');
 const db = {};
 
+const isDev = process.env.NODE_ENV === 'development';
+
 const sequelize = new Sequelize(config.db.name, config.db.username, config.db.password, {
   host: config.db.host,
   dialect: config.db.dialect,
+  logging: isDev,
 });
 
 const modelsPath = `${__dirname}/models`;
@@ -33,9 +36,13 @@ Object.keys(db).forEach((modelName) => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-logger.info('---Synchronizing database---');
+if (isDev) {
+  logger.info('---Synchronizing database---');
+}
 db.sequelize.sync().then(() => {
-  logger.info('---Database sync complete---');
+  if (isDev) {
+    logger.info('---Database sync complete---');
+  }
 });
 
 module.exports = db;
