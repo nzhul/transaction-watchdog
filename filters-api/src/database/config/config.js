@@ -2,15 +2,15 @@ const dotenv = require('dotenv');
 const path = require('path');
 const Joi = require('joi');
 
-dotenv.config({ path: path.join(__dirname, `../../.env`) });
+dotenv.config({ path: path.join(__dirname, `../../../.env`) });
 
 const envVarsSchema = Joi.object()
   .keys({
-    DB_HOST: Joi.string().default('127.0.0.1'),
-    DB_DATABASE: Joi.string().default('transaction-watchdog'),
-    DB_USERNAME: Joi.string().default('admin'),
-    DB_PASSWORD: Joi.string().default('admin'),
-    DB_DIALECT: Joi.string().default('postgres'),
+    DB_HOST: Joi.string().required(),
+    DB_DATABASE: Joi.string().required(),
+    DB_USERNAME: Joi.string().required(),
+    DB_PASSWORD: Joi.string().required(),
+    DB_DIALECT: Joi.string().required(),
   })
   .unknown();
 
