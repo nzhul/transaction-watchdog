@@ -16,10 +16,12 @@ Transaction watchdog is an Ethereum blockchain monitoring tool. The project cons
 
 ### Watcher
 1. Make sure API project is running and functional.
-2. Navigate to `{projectPath}/watcher/` and execute `yarn dev`
+2. Navigate to `{projectPath}/watcher/` and execute `yarn install` and then `yarn dev`
 3. The watcher service should start and trigger an CRON job. The cron job is executed every 10 seconds by default.
 
-If you have trouble running the project, please check my video recording here: `TODO: UPDATE WITH LINK HERE`
+ℹ️ If you have trouble running the project, please check my video recording here:
+- How to run video: https://www.youtube.com/watch?v=WZTHvQbFWfQ
+- Project details video: https://www.youtube.com/watch?v=Aqp0vmtO_3U
 
 # How Watcher works
 There were two options of implementing the watcher. Listening directly for events from the blockchain or implementing an background cron job that keeps track of the last processed block and processes only the unprocessed blocks. I've decided to go with the second approach because it gives the benefit of `not loosing data when the service is down`.
