@@ -20,8 +20,8 @@ const createOrUpdateFilter = {
   body: Joi.object().keys({
     name: Joi.string().required(),
     token: Joi.string().required(),
-    from: Joi.string(), // TODO: Regex validate it matches Blockchain `Address` format
-    to: Joi.string(), // TODO: Regex validate it matches Blockchain `Address` format
+    from: Joi.string(),
+    to: Joi.string(),
     minAmount: Joi.number(),
     maxAmount: Joi.number(),
   }),

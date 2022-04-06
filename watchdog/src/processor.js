@@ -30,7 +30,7 @@ async function Run() {
   const contract = new ethers.Contract(latestFilter.token, ERC20_ABI, provider);
 
   const lastBlockTracker = await db.Tracker.findOne({
-    name: TRACKER_NAME, // TODO: Extract into config or local constant.
+    name: TRACKER_NAME,
     logging: false,
   });
 

@@ -14,9 +14,9 @@ let sequelize;
 if (process.env.NODE_ENV === 'test') {
   sequelize = new Sequelize('sqlite::memory:', { logging: false });
 } else {
-  sequelize = new Sequelize(config.db.name, config.db.username, config.db.password, {
-    host: config.db.host,
-    dialect: config.db.dialect,
+  sequelize = new Sequelize(config.database, config.username, config.password, {
+    host: config.host,
+    dialect: config.dialect,
     logging: isDev,
   });
 }
