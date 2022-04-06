@@ -1,17 +1,20 @@
-const mongoose = require('mongoose');
+const db = require('../../src/database');
 const config = require('../../src/config/config');
 
 const setupTestDB = () => {
   beforeAll(async () => {
-    await mongoose.connect(config.mongoose.url, config.mongoose.options);
+    await db.sequelize.sync();
   });
 
   beforeEach(async () => {
-    await Promise.all(Object.values(mongoose.connection.collections).map(async (collection) => collection.deleteMany()));
+    // TODO: foreach all models.
+    await db.Transaction.destroy({ where: {}, truncate: true });
+    await db.Tracker.destroy({ where: {}, truncate: true });
+    await db.Filter.destroy({ where: {}, truncate: true });
   });
 
   afterAll(async () => {
-    await mongoose.disconnect();
+    await db.sequelize.close();
   });
 };
 

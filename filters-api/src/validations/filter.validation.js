@@ -7,7 +7,7 @@ const getFilter = {
 };
 
 const getFilters = {
-  params: Joi.object().keys({
+  query: Joi.object().keys({
     limit: Joi.number(),
     offset: Joi.number(),
   }),
