@@ -3,7 +3,8 @@ const path = require("path");
 const Joi = require("joi");
 
 dotenv.config({
-  path: path.join(__dirname, `../../.env-${process.env.NODE_ENV}`),
+  path: path.join(__dirname, `../../.env`),
+  // path: path.join(__dirname, `../../.env-${process.env.NODE_ENV}`),
 });
 
 const envVarsSchema = Joi.object()

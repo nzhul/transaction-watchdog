@@ -10,11 +10,16 @@ const db = {};
 
 const isDev = process.env.NODE_ENV === 'development';
 
-const sequelize = new Sequelize(config.db.name, config.db.username, config.db.password, {
-  host: config.db.host,
-  dialect: config.db.dialect,
-  logging: isDev,
-});
+let sequelize;
+if (process.env.NODE_ENV === 'test') {
+  sequelize = new Sequelize('sqlite::memory:', { logging: false });
+} else {
+  sequelize = new Sequelize(config.db.name, config.db.username, config.db.password, {
+    host: config.db.host,
+    dialect: config.db.dialect,
+    logging: isDev,
+  });
+}
 
 const modelsPath = `${__dirname}/models`;
 
