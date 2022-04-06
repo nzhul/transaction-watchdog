@@ -1,5 +1,4 @@
 const db = require('../../src/database');
-const config = require('../../src/config/config');
 
 const setupTestDB = () => {
   beforeAll(async () => {
